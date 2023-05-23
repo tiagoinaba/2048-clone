@@ -35,7 +35,7 @@ export default function Tile({ number, hasMoved, x, y, prevX, prevY }) {
     }
 
   return (
-    <div className={`${!hasMoved && 'tile'} ${moveTile()} transition-all duration-1000 h-[106px] w-[106px] flex items-center justify-center font-clear-sans font-bold text-5xl ${getColor()} rounded-sm`}>
+    <div className={`${!hasMoved && 'tile'} ${moveTile()} transition-all duration-1000 h-[106px] w-[106px] flex items-center justify-center font-bold text-5xl ${getColor()} rounded-sm`}>
         {number}
     </div>
   )

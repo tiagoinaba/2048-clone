@@ -21,7 +21,7 @@ module.exports = {
     },
 
     fontFamily: {
-      'clear-sans': ['Clear Sans', 'Helvetica Neue', 'Arial', 'sans-serif']
+      'clear-sans': ['var(--font-clearSans)']
     }
   },
   plugins: [],
