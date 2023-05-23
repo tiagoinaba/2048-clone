@@ -51,6 +51,23 @@ export default function Game() {
         return true
     }
 
+    function areObjectsEqual(obj1, obj2) {
+        const obj1Keys = Object.keys(obj1)
+        let returnBool = true
+
+        obj1Keys.forEach(key => {
+            const currentRow = obj1[key]
+
+            currentRow.forEach(tile => {
+                const tileIndex = currentRow.indexOf(tile)
+                if(tile.value !== obj2[key][tileIndex].value) {
+                    returnBool = false
+                }
+            })
+        })
+        return returnBool
+    }
+
     function handleKeyDown(e) {
         if(e.key === "ArrowLeft") {
             setRows(prev => {
@@ -59,6 +76,10 @@ export default function Game() {
 
                 prevRows.forEach(row => {
                     let filledTiles = row.filter(tile => {
+                        if(tile.hasOwnProperty("value")) {
+                            tile.prevX = row.indexOf(tile)
+                            tile.prevY = null
+                        }
                         return Object.keys(tile).length > 0
                     })
 
@@ -90,7 +111,13 @@ export default function Game() {
                         [rowIndex === 0 ? 'firstRow' : rowIndex === 1 ? 'secondRow' : rowIndex === 2 ? 'thirdRow' : 'fourthRow']: filledTiles
                     }
                 })
-                setShouldGetNewTile(true)
+                
+                if(areObjectsEqual(prev, updatedRows)) {
+                    setShouldGetNewTile(false)
+                } else {
+                    setShouldGetNewTile(true)
+                }
+
                 return updatedRows
             })
         }
@@ -102,6 +129,10 @@ export default function Game() {
 
                 prevRows.forEach(row => {
                     let filledTiles = row.filter(tile => {
+                        if(tile.hasOwnProperty("value")) {
+                            tile.prevX = row.indexOf(tile)
+                            tile.prevY = null
+                        }
                         return Object.keys(tile).length > 0
                     })
 
@@ -134,7 +165,11 @@ export default function Game() {
                         [rowIndex === 0 ? 'firstRow' : rowIndex === 1 ? 'secondRow' : rowIndex === 2 ? 'thirdRow' : 'fourthRow']: filledTiles
                     }
                 })
-                setShouldGetNewTile(true)
+                if(areObjectsEqual(prev, updatedRows)) {
+                    setShouldGetNewTile(false)
+                } else {
+                    setShouldGetNewTile(true)
+                }
                 return updatedRows
             })
         }
@@ -155,6 +190,10 @@ export default function Game() {
                 
                 prevColumns.forEach(column => {
                     let filledTiles = column.filter(tile => {
+                        if(tile.hasOwnProperty("value")) {
+                            tile.prevY = column.indexOf(tile)
+                            tile.prevX = null
+                        }
                         return Object.keys(tile).length > 0
                     })
 
@@ -196,7 +235,11 @@ export default function Game() {
                         [rowIndex === 0 ? 'firstRow' : rowIndex === 1 ? 'secondRow' : rowIndex === 2 ? 'thirdRow' : 'fourthRow']: row
                     }
                 })
-                setShouldGetNewTile(true)
+                if(areObjectsEqual(prev, updatedRows)) {
+                    setShouldGetNewTile(false)
+                } else {
+                    setShouldGetNewTile(true)
+                }
                 return updatedRows
             })
         }
@@ -217,6 +260,10 @@ export default function Game() {
                 
                 prevColumns.forEach(column => {
                     let filledTiles = column.filter(tile => {
+                        if(tile.hasOwnProperty("value")) {
+                            tile.prevY = column.indexOf(tile)
+                            tile.prevX = null
+                        }
                         return Object.keys(tile).length > 0
                     })
 
@@ -268,7 +315,11 @@ export default function Game() {
                 //     return updatedRows
                 // }
                 
-                setShouldGetNewTile(true)
+                if(areObjectsEqual(prev, updatedRows)) {
+                    setShouldGetNewTile(false)
+                } else {
+                    setShouldGetNewTile(true)
+                }
                 return updatedRows
             })
         }
@@ -304,15 +355,15 @@ export default function Game() {
     function startGame() {
         setRows({
             firstRow: [{}, {}, {}, {}],
-            secondRow: [{}, {value: 2, hasMoved: false, x: 1, y: 1}, {}, {}],
+            secondRow: [{}, {}, {}, {}],
             thirdRow: [{}, {}, {}, {}],
             fourthRow: [{}, {}, {}, {}]
         })
 
         setIsGridFull(false)
 
-        // generateTile()
-        // generateTile()
+        generateTile()
+        generateTile()
     }
 
     function generateTile() {

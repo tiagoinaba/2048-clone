@@ -1,15 +1,21 @@
-"use client"
-
 import React, { useEffect, useRef, useState } from 'react'
 
-export default function Tile({ number, hasMoved, x, y }) { 
-    const [cssPositionClass, setCssPositionClass] = useState(`position-${x}-${y}`)
+export default function Tile({ number, hasMoved, x, y, prevX, prevY }) { 
 
-    useEffect(() => {
-        setCssPositionClass(`position-${x}-${y}`)
-    }, [x, y])
+    function moveTile() {
+        let className = ""
+        if(hasMoved && prevX || hasMoved && prevX === 0) {
+            className = `moveX-${prevX}-${x}`
+        }
+        
+        if(hasMoved && prevY || hasMoved && prevY === 0) {
+            className = `moveY-${prevY}-${y}`
+        }
+
+        return className
+    }
     
-    function getColor(number) {
+    function getColor() {
         let backgroundColor = number === 2 ? 'two' : 
                                 number === 4 ? 'four' : 
                                 number === 8 ? 'eight' :
@@ -29,7 +35,7 @@ export default function Tile({ number, hasMoved, x, y }) {
     }
 
   return (
-    <div className={`${!hasMoved && 'tile'} ${cssPositionClass} transition-all duration-1000 h-[106px] w-[106px] flex items-center justify-center font-clear-sans font-bold text-5xl ${getColor(number)} rounded-sm`}>
+    <div className={`${!hasMoved && 'tile'} ${moveTile()} transition-all duration-1000 h-[106px] w-[106px] flex items-center justify-center font-clear-sans font-bold text-5xl ${getColor()} rounded-sm`}>
         {number}
     </div>
   )
