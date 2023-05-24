@@ -84,7 +84,7 @@ export default function Game() {
                     })
 
                     filledTiles = filledTiles.map(tile => {
-                        return {...tile, hasMoved: true, x: filledTiles.indexOf(tile)}
+                        return {...tile, hasMoved: true, x: filledTiles.indexOf(tile), mergedY: null, mergedX: null}
                     })
 
                     if(filledTiles.length > 1) {
@@ -94,7 +94,8 @@ export default function Game() {
                                 filledTiles.splice(i, 2, {
                                     value: (tile.value * 2),
                                     hasMoved: true,
-                                    x: i
+                                    x: i,
+                                    mergedX: [filledTiles[i + 1].prevX, tile.prevX]
                                 })
                             }
                         }
@@ -137,7 +138,7 @@ export default function Game() {
                     })
 
                     filledTiles = filledTiles.map(tile => {
-                        return {...tile, hasMoved: true, x: 4 - filledTiles.length + filledTiles.indexOf(tile)}
+                        return {...tile, hasMoved: true, x: 4 - filledTiles.length + filledTiles.indexOf(tile), mergedY: null, mergedX: null}
                     })
 
                     if(filledTiles.length > 1) {
@@ -147,7 +148,8 @@ export default function Game() {
                                 filledTiles.splice(i - 1, 2, {
                                     value: (tile.value * 2),
                                     hasMoved: true,
-                                    x: 4 - filledTiles.length + i - 1
+                                    x: 4 - filledTiles.length + i,
+                                    mergedX: [filledTiles[i - 1].prevX, tile.prevX]
                                 })
                                 i-=1
                             }
@@ -198,17 +200,19 @@ export default function Game() {
                     })
 
                     filledTiles = filledTiles.map(tile => {
-                        return {...tile, hasMoved: true, y: 4 - filledTiles.length + filledTiles.indexOf(tile)}
+                        return {...tile, hasMoved: true, y: 4 - filledTiles.length + filledTiles.indexOf(tile), mergedY: null, mergedX: null}
                     })
                     
                     if(filledTiles.length > 1) {
                         for(let i=filledTiles.length - 1; i > 0; i--) {
                             const tile = filledTiles[i]
                             if(tile.value === filledTiles[i - 1].value) {
+                                // console.log(filledTiles.length, 4 - filledTiles.length + i, i)
                                 filledTiles.splice(i - 1, 2, {
                                     value: (tile.value * 2),
                                     hasMoved: true,
-                                    y: 4 - filledTiles.length + i - 1
+                                    y: 4 - filledTiles.length + i,
+                                    mergedY: [filledTiles[i - 1].prevY, tile.prevY]
                                 })
                                 i-=1
                             }
@@ -268,7 +272,7 @@ export default function Game() {
                     })
 
                     filledTiles = filledTiles.map(tile => {
-                        return {...tile, hasMoved: true, y: filledTiles.indexOf(tile)}
+                        return {...tile, hasMoved: true, y: filledTiles.indexOf(tile), mergedY: null, mergedX: null}
                     })
 
                     if(filledTiles.length > 1) {
@@ -278,7 +282,8 @@ export default function Game() {
                                 filledTiles.splice(i, 2, {
                                     ...tile,
                                     value: (tile.value * 2),
-                                    x: i
+                                    y: i,
+                                    mergedY: [tile.prevY, filledTiles[i + 1].prevY]
                                 })
                             }
                         }
@@ -304,16 +309,6 @@ export default function Game() {
                         [rowIndex === 0 ? 'firstRow' : rowIndex === 1 ? 'secondRow' : rowIndex === 2 ? 'thirdRow' : 'fourthRow']: row
                     }
                 })
-
-                // if(areRowsEqual(prevRows, updatedRows)) {
-                //     console.log('equal')
-                //     setShouldGetNewTile(false)
-                //     return updatedRows
-                // } else {
-                //     console.log('not equal')
-                //     setShouldGetNewTile(true)
-                //     return updatedRows
-                // }
                 
                 if(areObjectsEqual(prev, updatedRows)) {
                     setShouldGetNewTile(false)
@@ -326,31 +321,6 @@ export default function Game() {
         
         
     }
-
-    // function areRowsEqual(prevRows, updRows) {
-    //     const keys1 = Object.keys(prevRows)
-    //     const keys2 = Object.keys(updRows)
-
-    //     for(let key of keys1) {
-    //         prevRows[key].forEach(obj => {
-    //             const objKeys = Object.keys(obj)
-    //             const obj2 = updRows[key][prevRows[key].indexOf(obj)]
-    //             const obj2Keys = Object.keys(obj2)
-
-    //             if(objKeys.length !== obj2Keys.length) {
-    //                 return false
-    //             }
-
-    //             for(let i of objKeys) {
-    //                 if(obj[i].value !== obj2[i]) {
-    //                     return false
-    //                 }
-    //             }
-
-    //             return true
-    //         })
-    //     }
-    // }
 
     function startGame() {
         setRows({
@@ -410,7 +380,7 @@ export default function Game() {
     }
 
   return (
-    <div className='w-[500px] h-[500px] bg-basic text-text rounded-lg p-[15px] flex flex-col gap-[15px] relative'>
+    <div className='w-[500px] h-[500px] bg-basic text-text rounded-lg p-[15px] flex flex-col gap-[15px] relative -z-20'>
         <Row rows={rows} row={"firstRow"} />
         <Row rows={rows} row={"secondRow"} />
         <Row rows={rows} row={"thirdRow"} />

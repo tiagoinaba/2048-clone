@@ -1,6 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react'
 
-export default function Tile({ number, hasMoved, x, y, prevX, prevY }) { 
+export default function Tile({ number, hasMoved, x, y, prevX, prevY, mergedX, mergedY }) { 
+
+    const [reset, setReset] = useState(false)
+
+    useEffect(() => {
+        setReset(false)
+    }, [number])
+
+    function toggleMergedClassName() {
+        setTimeout(() => setReset(true), 300)
+        if(mergedX) return 'merged'
+        if(mergedY) return 'merged'
+    }
 
     function moveTile() {
         let className = ""
@@ -31,11 +43,12 @@ export default function Tile({ number, hasMoved, x, y, prevX, prevY }) {
             backgroundColor = backgroundColor + ' white-text'
         }
         
+
         return backgroundColor
     }
 
   return (
-    <div className={`${!hasMoved && 'tile'} ${moveTile()} transition-all duration-1000 h-[106px] w-[106px] flex items-center justify-center font-bold text-5xl ${getColor()} rounded-sm`}>
+    <div className={`${!hasMoved && 'tile'} ${reset ? "" : toggleMergedClassName()} ${moveTile()} transition-all duration-1000 h-[106px] w-[106px] flex items-center justify-center font-bold text-5xl ${getColor()} rounded-sm`}>
         {number}
     </div>
   )

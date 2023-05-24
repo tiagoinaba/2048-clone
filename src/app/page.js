@@ -1,5 +1,9 @@
+'use client'
+
 import Game from "@/components/Game"
+import Start from "@/components/Start"
 import localFont from 'next/font/local'
+import { useEffect, useState } from "react"
 
 const clearSans = localFont({
   src: [
@@ -17,9 +21,19 @@ const clearSans = localFont({
 })
 
 export default function Home() {
+
+  const [reset, setReset] = useState(false)
+
+  useEffect(() => {
+    setReset(false)
+  })
+
   return (
-    <main className={`${clearSans.variable} flex items-center justify-center min-h-screen`}>
-      <Game />
+    <main className={`${clearSans.variable} flex items-center justify-center min-h-screen flex-col gap-8`}>
+      <Start onClick={() => {
+        setReset(true)
+      }} />
+      {!reset && <Game />}
     </main>
   )
 }
