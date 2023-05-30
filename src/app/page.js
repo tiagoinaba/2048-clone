@@ -1,6 +1,7 @@
 'use client'
 
 import Game from "@/components/Game"
+import SmallScreen from "@/components/SmallScreen"
 import Start from "@/components/Start"
 import localFont from 'next/font/local'
 import { useEffect, useState } from "react"
@@ -29,7 +30,8 @@ export default function Home() {
   })
 
   return (
-    <main className={`${clearSans.variable} flex items-center justify-center min-h-screen flex-col gap-8`}>
+    <main className={`${clearSans.variable} flex items-center justify-center min-h-screen min-w-screen flex-col gap-8`}>
+      <SmallScreen />
       <Start onClick={() => {
         setReset(true)
       }} />
